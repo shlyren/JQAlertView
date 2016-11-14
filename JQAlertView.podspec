@@ -12,6 +12,5 @@ Pod::Spec.new do |s|
   s.requires_arc =  true
   s.public_header_files = 'JQAlertView/JQAlertView.h'
   s.source_files = "JQAlertView/*.{h,m}"
-
-  end
+  
 end
