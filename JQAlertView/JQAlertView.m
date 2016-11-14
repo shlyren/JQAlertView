@@ -8,6 +8,7 @@
 
 #import "JQAlertView.h"
 
+#pragma mark - JQAlertAction
 @interface JQAlertAction ()
 @property (nonatomic, strong) NSString *actionTitle;
 @property (nonatomic, assign) JQAlertActionStyle actionStyle;
@@ -35,7 +36,7 @@
 }
 @end
 
-
+#pragma mark - JQAlertView
 
 static const CGFloat kRowHeight = 48.0f;
 static const CGFloat kRowLineHeight = 1.0f;

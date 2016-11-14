@@ -24,6 +24,7 @@ typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
     JQAlertActionStyleDestructive = 2
 };
 
+#pragma mark - JQAlertAction
 @interface JQAlertAction : NSObject
 
 @property (nullable, nonatomic, readonly) NSString *title;
@@ -46,6 +47,8 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
 //    JQAlertControllerStyleAlert
 };
 
+
+#pragma mark - JQAlertView
 @interface JQAlertView : UIView
 
 @property (nullable, nonatomic, copy) NSString *title;
