@@ -97,7 +97,6 @@ static const NSTimeInterval kAnimateDuration = 0.4f;
         self.frame = CGRectMake(0, 0, [[UIScreen mainScreen] bounds].size.width, [[UIScreen mainScreen] bounds].size.height);
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         
-        
         _backgroundView = [[UIView alloc] initWithFrame:self.frame];
         _backgroundView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
         _backgroundView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:0.4f];
@@ -108,8 +107,7 @@ static const NSTimeInterval kAnimateDuration = 0.4f;
         _actionSheetView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
         _actionSheetView.backgroundColor = [UIColor colorWithRed:238.0f/255.0f green:238.0f/255.0f blue:238.0f/255.0f alpha:1.0f];
         [self addSubview:_actionSheetView];
-        
-        
+
         _actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 0);
     }
     
@@ -168,7 +166,7 @@ static const NSTimeInterval kAnimateDuration = 0.4f;
     
     if (self.message && self.message.length)
     {
-        
+    
         CGFloat msgHeight = ceil([self.message boundingRectWithSize:CGSizeMake(self.frame.size.width, MAXFLOAT) options:NSStringDrawingUsesLineFragmentOrigin attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kMsgFontSize]} context:nil].size.height) + 10;
         
         UILabel *msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, actionSheetHeight, self.frame.size.width, msgHeight)];

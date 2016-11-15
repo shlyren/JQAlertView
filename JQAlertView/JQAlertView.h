@@ -11,13 +11,6 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-/**
- 按钮的类型
- 
- - JQAlertActionStyleDefault: 默认
- - JQAlertActionStyleCancel: 取消
- - JQAlertActionStyleDestructive: 毁灭性操作
- */
 typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
     JQAlertActionStyleDefault = 0,
     JQAlertActionStyleCancel = 1,
@@ -35,13 +28,6 @@ typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
 @end
 
 
-
-/**
- 展示的方式
-
- - JQAlertControllerStyleActionSheet: 从中间弹出
- - JQAlertControllerStyleAlert: 从底部弹出
- */
 typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
     JQAlertControllerStyleActionSheet = 0,
 //    JQAlertControllerStyleAlert
