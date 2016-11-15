@@ -1,6 +1,7 @@
 #JQAlertView
 
 一个类似于微信的弹出视图, 暂只支持从底部弹出
+
 <img src="http://ww4.sinaimg.cn/mw690/6a80ef0fgw1f9sk3prc54j20ko10yt9y.jpg" width=200/>
 
 ## 导入
