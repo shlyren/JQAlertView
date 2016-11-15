@@ -31,7 +31,7 @@
         NSLog(@"destructive action");
     }];
     
-    [alertView addActions:@[action1, action2, action3]];
+    [alertView addActions:@[action1, action2, action3, action1]];
     [alertView show];
 
 }
