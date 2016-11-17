@@ -22,6 +22,13 @@
 
 }
 
+/**
+ pod spec lint
+ pod trunk push YXCategories.podspec --allow-warnings
+ 
+ */
+
+
 - (IBAction)showAlert
 {
     [self showWithStyle:JQAlertViewStyleAlert twoAction:self.isTwo.isOn];
