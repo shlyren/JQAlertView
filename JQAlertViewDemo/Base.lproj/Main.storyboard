@@ -6,6 +6,7 @@
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <capability name="Constraints with non-1.0 multipliers" minToolsVersion="5.1"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -21,20 +22,55 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oG-EN-iKH">
-                                <rect key="frame" x="169" y="318" width="37" height="30"/>
-                                <state key="normal" title="show"/>
+                            <button opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="4oG-EN-iKH">
+                                <rect key="frame" x="52" y="318.5" width="84" height="30"/>
+                                <state key="normal" title="ActionSheet"/>
                                 <connections>
                                     <action selector="show" destination="BYZ-38-t0r" eventType="touchUpInside" id="77U-jZ-zNK"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="LZM-eL-OX0">
+                                <rect key="frame" x="265.5" y="318.5" width="33" height="30"/>
+                                <state key="normal" title="Alert"/>
+                                <connections>
+                                    <action selector="showAlert" destination="BYZ-38-t0r" eventType="touchUpInside" id="Gw4-DT-hel"/>
+                                </connections>
+                            </button>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="9Fz-yN-QSJ">
+                                <rect key="frame" x="257" y="277.5" width="51" height="31"/>
+                            </switch>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sGs-ne-5L5">
+                                <rect key="frame" x="205" y="123.5" width="154" height="144"/>
+                                <string key="text">JQAlertControllerStyleAlert
+
+此模式下:
+如果actions.count &lt;= 2
+按钮默认在一行显示,
+还有一种情况: 
+action.title宽度&gt;按钮的宽度
+按钮会单独在一行显示
+如果actions.count &gt; 2
+每个按钮单独一行显示</string>
+                                <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="LZM-eL-OX0" firstAttribute="top" secondItem="9Fz-yN-QSJ" secondAttribute="bottom" constant="10" id="6W3-u1-hgp"/>
                             <constraint firstItem="4oG-EN-iKH" firstAttribute="centerY" secondItem="8bC-Xf-vdC" secondAttribute="centerY" id="Hjr-2s-SVw"/>
-                            <constraint firstItem="4oG-EN-iKH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="xwX-3N-I0k"/>
+                            <constraint firstItem="sGs-ne-5L5" firstAttribute="centerX" secondItem="9Fz-yN-QSJ" secondAttribute="centerX" id="IfU-zx-V3f"/>
+                            <constraint firstItem="9Fz-yN-QSJ" firstAttribute="centerX" secondItem="LZM-eL-OX0" secondAttribute="centerX" id="U3c-Cm-tsI"/>
+                            <constraint firstItem="9Fz-yN-QSJ" firstAttribute="top" secondItem="sGs-ne-5L5" secondAttribute="bottom" constant="10" id="YVW-GW-Wyf"/>
+                            <constraint firstItem="LZM-eL-OX0" firstAttribute="centerY" secondItem="4oG-EN-iKH" secondAttribute="centerY" id="qiM-Cs-vCC"/>
+                            <constraint firstItem="LZM-eL-OX0" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" multiplier="1.5" id="vIK-XX-Y05"/>
+                            <constraint firstItem="4oG-EN-iKH" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" multiplier="0.5" id="xwX-3N-I0k"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="isTwo" destination="9Fz-yN-QSJ" id="usn-3f-3Eg"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>

@@ -8,16 +8,15 @@
 
 #import <UIKit/UIKit.h>
 
-
 NS_ASSUME_NONNULL_BEGIN
 
+#pragma mark - JQAlertAction
 typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
     JQAlertActionStyleDefault = 0,
     JQAlertActionStyleCancel = 1,
     JQAlertActionStyleDestructive = 2
 };
 
-#pragma mark - JQAlertAction
 @interface JQAlertAction : NSObject
 
 @property (nullable, nonatomic, readonly) NSString *title;
@@ -28,13 +27,13 @@ typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
 @end
 
 
+#pragma mark - JQAlertView
 typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
-    JQAlertControllerStyleActionSheet = 0,
-//    JQAlertControllerStyleAlert
+    JQAlertViewStyleActionSheet = 0, // modal
+    JQAlertViewStyleAlert // show in screen center
 };
 
 
-#pragma mark - JQAlertView
 @interface JQAlertView : UIView
 
 @property (nullable, nonatomic, copy) NSString *title;
@@ -45,10 +44,10 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
 
 @property (nonatomic, readonly, strong) NSArray<JQAlertAction *> *actions;
 
-
 + (instancetype)alertViewWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(JQAlertViewStyle)preferredStyle;
 
 - (void)addActions:(NSArray <JQAlertAction *>*)actions;
+
 - (void)show;
 
 NS_ASSUME_NONNULL_END

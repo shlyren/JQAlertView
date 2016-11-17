@@ -10,6 +10,7 @@
 #import "JQAlertView.h"
 
 @interface ViewController ()
+@property (weak, nonatomic) IBOutlet UISwitch *isTwo;
 
 @end
 
@@ -17,7 +18,18 @@
 
 - (IBAction)show
 {
-    JQAlertView *alertView = [JQAlertView alertViewWithTitle:@"JQAlertViewDemo Title" message:@"This Is JQAlertViewDemo Message" preferredStyle:JQAlertControllerStyleActionSheet];
+    [self showWithStyle:JQAlertViewStyleActionSheet twoAction:false];
+
+}
+
+- (IBAction)showAlert
+{
+    [self showWithStyle:JQAlertViewStyleAlert twoAction:self.isTwo.isOn];
+}
+
+- (void)showWithStyle:(JQAlertViewStyle)style twoAction:(BOOL)isTwo
+{
+    JQAlertView *alertView = [JQAlertView alertViewWithTitle:@"JQAlertViewDemo Title" message:@"This Is JQAlertViewDemo Message" preferredStyle:style];
     
     JQAlertAction *action1 = [JQAlertAction actionWithTitle:@"default" style:JQAlertActionStyleDefault handler:^(JQAlertAction * _Nonnull action) {
         NSLog(@"default action");
@@ -31,10 +43,20 @@
         NSLog(@"destructive action");
     }];
     
-    [alertView addActions:@[action1, action2, action3, action1]];
+    JQAlertAction *action4 = [JQAlertAction actionWithTitle:@"default" style:JQAlertActionStyleDefault handler:^(JQAlertAction * _Nonnull action) {
+        NSLog(@"default action");
+    }];
+    
+    
+    
+    if (!isTwo)
+    {
+        [alertView addActions:@[action1, action2, action3, action4]];
+    }else{
+        [alertView addActions:@[action1, action2]];
+    }
+    
     [alertView show];
-
 }
-
 
 @end

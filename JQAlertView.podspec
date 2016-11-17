@@ -1,9 +1,9 @@
 
 Pod::Spec.new do |s|
   s.name         = "JQAlertView"
-  s.version      = "1.0.1"
-  s.summary      = "一个类似于微信的alertView"
-  s.homepage     = "https://yuxiang.ren"
+  s.version      = "1.1.0"
+  s.summary      = "一个类似于微信的弹出视图"
+  s.homepage     = "https://github.com/shlyren/JQAlertView"
   s.license      = { :type => 'MIT', :file => 'LICENSE' }
   s.author       = { "shlyren" => "shlyren@163.com" }
   s.platform     = :ios, "8.0"
