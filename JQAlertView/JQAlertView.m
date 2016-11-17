@@ -43,7 +43,7 @@ static const CGFloat kRowLineHeight = 1.0f;
 static const CGFloat kSeparatorHeight = 6.0f;
 static const CGFloat kTitleFontSize = 15.0f;
 static const CGFloat kMsgFontSize = 13.0f;
-static const CGFloat kButtonTitleFontSize = 18.0f;
+static const CGFloat kBtnTitleFontSize = 18.0f;
 static const NSTimeInterval kShowAnimateDuration = 0.4f;
 static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
@@ -205,7 +205,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
         {
             CGFloat titleWidth = ceil([action.title boundingRectWithSize:CGSizeMake(MAXFLOAT, actionSheetHeight)
                                                                  options:NSStringDrawingUsesLineFragmentOrigin
-                                                              attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:kButtonTitleFontSize]}
+                                                              attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:kBtnTitleFontSize]}
                                                                  context:nil].size.width);
             if (titleWidth > btnWidth)
             {
@@ -230,7 +230,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
             UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
             button.frame = CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight);
             button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
+            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
             [button setTitle:action.title forState:UIControlStateNormal];
             [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
             [button setBackgroundImage:normalImg forState:UIControlStateNormal];
@@ -256,7 +256,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
             button.frame = CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight);
             button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
             button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kButtonTitleFontSize];
+            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
             [button setTitle:action.title forState:UIControlStateNormal];
             [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
             [button setBackgroundImage:normalImg forState:UIControlStateNormal];
@@ -309,7 +309,8 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
                             options:UIViewAnimationOptionCurveEaseInOut
                          animations:^{
              self.backgroundView.alpha = 1.0f;
-             if (self.style == JQAlertViewStyleActionSheet) {
+             if (self.style == JQAlertViewStyleActionSheet)
+             {
                  self.actionSheetView.frame = CGRectMake(0, self.frame.size.height-self.actionSheetView.frame.size.height, self.frame.size.width, self.actionSheetView.frame.size.height);
              }else{
                  self.actionSheetView.alpha = 1.0f;
@@ -329,7 +330,6 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
 - (void)dismiss
 {
-    
     [UIView animateWithDuration:kDismissAnimateDuration
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
