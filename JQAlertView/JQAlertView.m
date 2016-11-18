@@ -47,6 +47,8 @@ static const CGFloat kBtnTitleFontSize = 18.0f;
 static const NSTimeInterval kShowAnimateDuration = 0.4f;
 static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
+#define actionSheetViewWidth ([UIScreen mainScreen].bounds.size.width * 0.7)
+
 @interface JQAlertView()
 @property (nonatomic, assign) JQAlertViewStyle style;
 @property (nonatomic, strong) NSMutableArray <JQAlertAction *> *alertActions;
@@ -151,7 +153,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     {
         actionSheetHeight += kRowLineHeight;
         
-        CGFloat titleHeight = ceil([self.title boundingRectWithSize:CGSizeMake(self.frame.size.width, MAXFLOAT)
+        CGFloat titleHeight = ceil([self.title boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
                                                             options:NSStringDrawingUsesLineFragmentOrigin
                                                          attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]}
                                                             context:nil].size.height) + 10;
@@ -173,7 +175,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     if (self.message && self.message.length)
     {
     
-        CGFloat msgHeight = ceil([self.message boundingRectWithSize:CGSizeMake(self.frame.size.width, MAXFLOAT)
+        CGFloat msgHeight = ceil([self.message boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
                                                             options:NSStringDrawingUsesLineFragmentOrigin
                                                          attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kMsgFontSize]}
                                                             context:nil].size.height) + 15;
@@ -193,7 +195,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     
     UIImage *normalImg = [self imageWithColor:[UIColor whiteColor]];
     UIImage *highlightedImg = [self imageWithColor:JQColor(242, 242, 242)];
-    CGFloat actionSheetViewWidth = [UIScreen mainScreen].bounds.size.width * 0.7;
+   
     CGFloat btnWidth = actionSheetViewWidth * 0.5 - kRowLineHeight;
    
     // 记录当按钮为两个的时候 alert模式下 文字时候正常显示
