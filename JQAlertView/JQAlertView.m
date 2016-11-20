@@ -57,8 +57,8 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 @property (weak, nonatomic) UIView *backgroundView;
 /** 弹出视图 */
 @property (weak, nonatomic) UIView *actionSheetView;
-/** 点击的按钮 */
-@property (nonatomic, weak) UIButton *clickBtn;
+/** 回调 */
+@property (nonatomic, copy) void (^alertViewHandler)(JQAlertView *alertView, NSInteger index);
 
 @end
 
@@ -89,14 +89,44 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     return [[self alloc] initWithTitle:title message:message preferredStyle:preferredStyle];
 }
 
++ (void)showAlertViewWithTitle:(nullable NSString *)title
+                       message:(nullable NSString *)message
+                preferredStyle:(JQAlertViewStyle)preferredStyle
+                        titles:(nullable NSArray <NSString *>*)titles
+              destructiveTitle:(nullable NSString *)destructiveTitle
+                   cancelTitle:(nullable NSString *)cancelTitle
+                       handler:(void (^)(JQAlertView *alertView, NSInteger index))handler;
+{
+    JQAlertView *alertView = [[self alloc] initWithTitle:title message:message preferredStyle:preferredStyle];
+    
+    for (NSString *otherTitle in titles) {
+        JQAlertAction *action = [JQAlertAction actionWithTitle:otherTitle style:JQAlertActionStyleDefault handler:nil];
+        [alertView.alertActions addObject:action];
+    }
+    
+    if (destructiveTitle && destructiveTitle.length) {
+        JQAlertAction *destr = [JQAlertAction actionWithTitle:destructiveTitle style:JQAlertActionStyleDestructive handler:nil];
+        [alertView.alertActions addObject:destr];
+    }
+    
+    
+    if (cancelTitle && cancelTitle.length) {
+        JQAlertAction *cancel = [JQAlertAction actionWithTitle:cancelTitle style:JQAlertActionStyleCancel handler:nil];
+        [alertView.alertActions addObject:cancel];
+    }
+    
+    alertView.alertViewHandler = handler;
+    
+    [alertView show];
+}
 
 - (instancetype)initWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(JQAlertViewStyle)preferredStyle
 {
     self = [super initWithFrame:[UIScreen mainScreen].bounds];
     if (self)
     {
-        self.title = title;
-        self.message = message;
+        _title = title;
+        _message = message;
         self.style = preferredStyle;
         
         self.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -326,23 +356,20 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
 - (void)buttonClicked:(UIButton *)button
 {
-    self.clickBtn = button;
-    [self dismiss];
-}
-
-- (void)dismiss
-{
     [UIView animateWithDuration:kDismissAnimateDuration
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-        [self hideView];
-    } completion:^(BOOL finished) {
-        JQAlertAction *action = self.alertActions[self.clickBtn.tag];
-        if (action.action)
-            action.action(action);
-        [self removeFromSuperview];
-    }];
+                         [self hideView];
+                     } completion:^(BOOL finished) {
+                         JQAlertAction *action = self.alertActions[button.tag];
+                         if (action.action)
+                             action.action(action);
+                         if (self.alertViewHandler)
+                             self.alertViewHandler(self, button.tag);
+                         
+                         [self removeFromSuperview];
+                     }];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event

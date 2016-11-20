@@ -24,10 +24,37 @@
 
 /**
  pod spec lint
- pod trunk push YXCategories.podspec --allow-warnings
+ pod trunk push JQAlertView.podspec --allow-warnings
  
  */
 
+- (IBAction)onelint
+{
+    
+    [JQAlertView showAlertViewWithTitle:@"showAlert"
+                                message:@"choose alertView style"
+                         preferredStyle:JQAlertViewStyleActionSheet
+                                 titles:@[@"JQAlertViewStyleActionSheet", @"JQAlertViewStyleAlert"]
+                       destructiveTitle:nil
+                            cancelTitle:@"cancel"
+                                handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
+       
+        if (index > 1) return;
+
+        [JQAlertView showAlertViewWithTitle:@"title"
+                                    message:@"message"
+                             preferredStyle:index
+                                     titles:@[@"action1", @"action2"]
+                           destructiveTitle:@"delete"
+                                cancelTitle:@"cancel"
+                                    handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
+                                        
+              NSLog(@"index == %zd, title: %@", index, alertView.title);
+         }];
+
+    }];
+    
+   }
 
 - (IBAction)showAlert
 {
@@ -36,7 +63,7 @@
 
 - (void)showWithStyle:(JQAlertViewStyle)style twoAction:(BOOL)isTwo
 {
-    JQAlertView *alertView = [JQAlertView alertViewWithTitle:@"JQAlertViewDemo Title" message:@"This Is JQAlertViewDemo Message" preferredStyle:style];
+    JQAlertView *alertView = [JQAlertView alertViewWithTitle:@"JQAlertViewDemo Title" message:@"This is JQAlertViewDemo message \nIs like wechat alert" preferredStyle:style];
     
     JQAlertAction *action1 = [JQAlertAction actionWithTitle:@"default" style:JQAlertActionStyleDefault handler:^(JQAlertAction * _Nonnull action) {
         NSLog(@"default action");
