@@ -32,7 +32,7 @@
 {
     
     [JQAlertView showAlertViewWithTitle:@"showAlert"
-                                message:@"choose alertView style"
+                                message:@"alertView style"
                          preferredStyle:JQAlertViewStyleActionSheet
                                  titles:@[@"JQAlertViewStyleActionSheet", @"JQAlertViewStyleAlert"]
                        destructiveTitle:nil
@@ -41,8 +41,8 @@
        
         if (index > 1) return;
 
-        [JQAlertView showAlertViewWithTitle:@"title"
-                                    message:@"message"
+        [JQAlertView showAlertViewWithTitle:alertView.message
+                                    message:[NSString stringWithFormat:@"%zd",index]
                              preferredStyle:index
                                      titles:@[@"action1", @"action2"]
                            destructiveTitle:@"delete"

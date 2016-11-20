@@ -56,9 +56,10 @@ action.title宽度&gt;按钮的宽度
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8k0-rX-TZd">
-                                <rect key="frame" x="61" y="91" width="46" height="30"/>
+                                <rect key="frame" x="16" y="88" width="108" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <state key="normal" title="one line"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="11"/>
+                                <state key="normal" title="快速显示的方法"/>
                                 <connections>
                                     <action selector="onelint" destination="BYZ-38-t0r" eventType="touchUpInside" id="28A-Lc-nML"/>
                                 </connections>
@@ -82,6 +83,7 @@ action.title宽度&gt;按钮的宽度
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
+            <point key="canvasLocation" x="32.799999999999997" y="51.724137931034484"/>
         </scene>
     </scenes>
 </document>
