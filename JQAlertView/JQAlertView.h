@@ -30,7 +30,7 @@ typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
 #pragma mark - JQAlertView
 typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
     JQAlertViewStyleActionSheet = 0, // modal
-    JQAlertViewStyleAlert // show in screen center
+    JQAlertViewStyleAlert // show in window center
 };
 
 
@@ -61,9 +61,7 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
                         titles:(nullable NSArray <NSString *>*)titles // index: [0 ... titles.count-1]
               destructiveTitle:(nullable NSString *)destructiveTitle // index == titles.count
                    cancelTitle:(nullable NSString *)cancelTitle // if destructiveTitle != nil or @"" index is `titles.count+1`, else index is `titles.count`
-                       handler:(void (^)(JQAlertView *alertView, NSInteger index))handler;
-
-
+                       handler:(void (^ __nullable)(JQAlertView *alertView, NSInteger index))handler;
 
 + (instancetype)alertViewWithTitle:(nullable NSString *)title
                            message:(nullable NSString *)message

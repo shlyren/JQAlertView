@@ -71,7 +71,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     if (!_alertActions) {
         _alertActions = [NSMutableArray array];
     }
-    
+
     return _alertActions;
 }
 - (JQAlertViewStyle)preferredStyle
@@ -95,10 +95,10 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
                         titles:(nullable NSArray <NSString *>*)titles
               destructiveTitle:(nullable NSString *)destructiveTitle
                    cancelTitle:(nullable NSString *)cancelTitle
-                       handler:(void (^)(JQAlertView *alertView, NSInteger index))handler;
+                       handler:(void (^ __nullable)(JQAlertView *alertView, NSInteger index))handler;
 {
     JQAlertView *alertView = [[self alloc] initWithTitle:title message:message preferredStyle:preferredStyle];
-    
+
     for (NSString *otherTitle in titles) {
         JQAlertAction *action = [JQAlertAction actionWithTitle:otherTitle style:JQAlertActionStyleDefault handler:nil];
         [alertView.alertActions addObject:action];
@@ -163,11 +163,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
         }else {
             [self.alertActions addObject:action];
         }
-        
-        if (count > 1)
-            [[NSException exceptionWithName:@"JQAlertView Error"
-                                     reason:@"JQAlertView can only have one action with a style of JQAlertActionStyleCancel"
-                                   userInfo:nil] raise];
+        NSAssert(count < 2, @"JQAlertView can only have one action with a style of JQAlertActionStyleCancel");
     }
     
     if (cancelAction) [self.alertActions addObject:cancelAction];
@@ -230,8 +226,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
    
     // 记录当按钮为两个的时候 alert模式下 文字时候正常显示
     BOOL isInOneLine = true;
-    if (self.alertActions.count == 2 &&
-        self.style == JQAlertViewStyleAlert)
+    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert)
     {
         for (JQAlertAction *action in self.alertActions)
         {
@@ -249,9 +244,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     }
     
 
-    if (self.alertActions.count == 2 &&
-        self.style == JQAlertViewStyleAlert &&
-        isInOneLine)
+    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert && isInOneLine)
     {
 
         actionSheetHeight += kRowLineHeight;
@@ -360,44 +353,36 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
                           delay:0
                         options:UIViewAnimationOptionCurveEaseInOut
                      animations:^{
-                         [self hideView];
-                     } completion:^(BOOL finished) {
-                         JQAlertAction *action = self.alertActions[button.tag];
-                         if (action.action)
-                             action.action(action);
-                         if (self.alertViewHandler)
-                             self.alertViewHandler(self, button.tag);
+
+         self.backgroundView.alpha = 0.0f;
+         if (self.style == JQAlertViewStyleActionSheet)
+         {
+             self.actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, self.actionSheetView.frame.size.height);
+         }else{
+             self.actionSheetView.alpha = 0.0f;
+         }
                          
-                         [self removeFromSuperview];
-                     }];
+                     } completion:^(BOOL finished) {
+
+         if (button)
+         {
+             JQAlertAction *action = self.alertActions[button.tag];
+             if (action.action)
+                 action.action(action);
+             if (self.alertViewHandler)
+                 self.alertViewHandler(self, button.tag);
+         }
+         
+         [self removeFromSuperview];
+     }];
 }
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
 {
     CGPoint point = [[touches anyObject] locationInView:self.backgroundView];
     if (CGRectContainsPoint(self.actionSheetView.frame, point)) return;
-    [UIView animateWithDuration:kDismissAnimateDuration
-                          delay:0
-                        options:UIViewAnimationOptionCurveEaseInOut
-                     animations:^{
-        [self hideView];
-    } completion:^(BOOL finished) {
-        [self removeFromSuperview];
-    }];
+    [self buttonClicked:nil];
 }
-
-- (void)hideView
-{
-    self.backgroundView.alpha = 0.0f;
-
-    if (self.style == JQAlertViewStyleActionSheet)
-    {
-        self.actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, self.actionSheetView.frame.size.height);
-    }else{
-        self.actionSheetView.alpha = 0.0f;
-    }
-}
-
 
 - (UIImage *)imageWithColor:(UIColor *)color
 {

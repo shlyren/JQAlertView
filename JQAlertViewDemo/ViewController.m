@@ -82,7 +82,6 @@
     }];
     
     
-    
     if (!isTwo)
     {
         [alertView addActions:@[action1, action2, action3, action4]];
