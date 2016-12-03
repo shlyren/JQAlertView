@@ -11,7 +11,7 @@
  * **pod 'JQAlertView'**
 
 ## 使用
-使用类似于`UIAlertController`
+1. 使用类似于`UIAlertController`
 
 ```objc
 // 创建alertView
@@ -32,6 +32,35 @@ JQAlertAction *action3 = [JQAlertAction actionWithTitle:@"destructive" style:JQA
 [alertView addActions:@[action1, action2, action3]];
 // 显示
 [alertView show];
+
+```
+
+2. 快速创建:
+
+```objc
+[JQAlertView showAlertViewWithTitle:@"showAlert"
+                                message:@"alertView style"
+                         preferredStyle:JQAlertViewStyleActionSheet
+                                 titles:@[@"JQAlertViewStyleActionSheet", @"JQAlertViewStyleAlert"]
+                       destructiveTitle:nil
+                            cancelTitle:@"cancel"
+                                handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
+       
+        if (index > 1) return;
+
+        [JQAlertView showAlertViewWithTitle:alertView.message
+                                    message:[NSString stringWithFormat:@"%zd",index]
+                             preferredStyle:index
+                                     titles:@[@"action1", @"action2"]
+                           destructiveTitle:@"delete"
+                                cancelTitle:@"cancel"
+                                    handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
+                                        
+              NSLog(@"index == %zd, title: %@", index, alertView.title);
+         }];
+
+    }];
+    
 
 ```
 
