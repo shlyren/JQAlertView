@@ -202,6 +202,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 - (void)show
 {
     [self setupSubView];
+    
     dispatch_async(dispatch_get_main_queue(), ^{
         NSEnumerator *frontToBackWindows = [UIApplication.sharedApplication.windows reverseObjectEnumerator];
         for (UIWindow *window in frontToBackWindows)
@@ -308,32 +309,33 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     }
     
     
+//    BOOL alertOneLine = self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert && isInOneLine;
+//    
+//    actionSheetHeight += alertOneLine ? kRowLineHeight : 0;
+//    for (NSInteger i = 0; i < self.alertActions.count; i++)
+//    {
+//        actionSheetHeight += alertOneLine ? 0 : self.alertActions[i].style == JQAlertActionStyleCancel ? kSeparatorHeight : kRowLineHeight;
+//        
+//        CGRect frame = alertOneLine ? CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight) :
+//                                      CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight);
+//        [self setupBtnWithAction:self.alertActions[i]
+//                           frame:frame
+//                    resizingMask:alertOneLine ? UIViewAutoresizingNone : UIViewAutoresizingFlexibleWidth];
+//        if (alertOneLine) continue;
+//        
+//        actionSheetHeight += kRowHeight;
+//    }
+//    actionSheetHeight += alertOneLine ? kRowHeight : 0;
+    
     // button
-    UIImage *normalImg = [UIColor whiteColor].image;
-    UIImage *highlightedImg = JQColor(242, 242, 242).image;
     if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert && isInOneLine)
     {
         
         actionSheetHeight += kRowLineHeight;
         for (NSInteger i = 0; i < self.alertActions.count; i++)
-        {
-            JQAlertAction *action = self.alertActions[i];
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight);
-            button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
-            [button setTitle:action.title forState:UIControlStateNormal];
-            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
-            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
-            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
-            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            
-            if (action.style == JQAlertActionStyleDestructive)
-                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            
-            [_actionSheetView addSubview:button];
-        }
+            [self setupBtnWithAction:self.alertActions[i]
+                               frame:CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight)
+                        resizingMask:UIViewAutoresizingNone];
         actionSheetHeight += kRowHeight;
         
     }else{
@@ -343,22 +345,10 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
             JQAlertAction *action = self.alertActions[i];
             
             actionSheetHeight += action.style == JQAlertActionStyleCancel ? kSeparatorHeight : kRowLineHeight;
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight);
-            button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
-            [button setTitle:action.title forState:UIControlStateNormal];
-            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
-            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
-            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
-            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            
-            if (action.style == JQAlertActionStyleDestructive)
-                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            
-            [_actionSheetView addSubview:button];
+    
+            [self setupBtnWithAction:action
+                               frame:CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight)
+                        resizingMask:UIViewAutoresizingFlexibleWidth];
             actionSheetHeight += kRowHeight;
         }
     }
@@ -378,6 +368,28 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     }
 }
 
+/** 创建按钮 */
+- (void)setupBtnWithAction:(JQAlertAction *)action frame:(CGRect)frame resizingMask:(UIViewAutoresizing)resizingMask
+{
+    
+    UIImage *normalImg = [UIColor whiteColor].image;
+    UIImage *highlightedImg = JQColor(242, 242, 242).image;
+    UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+    button.frame = frame;
+    button.autoresizingMask = resizingMask;
+    button.tag = [self.alertActions indexOfObject:action];
+    button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
+    [button setTitle:action.title forState:UIControlStateNormal];
+    [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
+    [button setBackgroundImage:normalImg forState:UIControlStateNormal];
+    [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
+    [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+
+    if (action.style == JQAlertActionStyleDestructive)
+        [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+    
+    [_actionSheetView addSubview:button];
+}
 
 #pragma mark - 按钮点击
 - (void)buttonClicked:(UIButton *)button
