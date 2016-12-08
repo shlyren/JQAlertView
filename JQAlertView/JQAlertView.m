@@ -8,6 +8,24 @@
 
 #import "JQAlertView.h"
 
+#pragma UIColor Categoty
+@implementation UIColor (JQImage)
+- (UIImage *)image
+{
+    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
+    UIGraphicsBeginImageContext(rect.size);
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    CGContextSetFillColorWithColor(context, [self CGColor]);
+    CGContextFillRect(context, rect);
+    
+    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
+    UIGraphicsEndImageContext();
+    
+    return image;
+}
+@end
+
 #pragma mark - JQAlertAction
 @interface JQAlertAction ()
 @property (nonatomic, strong) NSString *actionTitle;
@@ -27,28 +45,26 @@
 
 - (NSString *)title
 {
-    return _actionTitle;
+    return self.actionTitle;
 }
 
 - (JQAlertActionStyle)style
 {
-    return _actionStyle;
+    return self.actionStyle;
 }
+
 @end
 
+#pragma mark - const
+CGFloat const kRowHeight = 48.0f;
+CGFloat const kRowLineHeight = 1.0f;
+CGFloat const kSeparatorHeight = 6.0f;
+CGFloat const kTitleFontSize = 15.0f;
+CGFloat const kMsgFontSize = 13.0f;
+CGFloat const kBtnTitleFontSize = 18.0f;
+NSTimeInterval const kShowAnimateDuration = 0.4f;
+NSTimeInterval const kDismissAnimateDuration = 0.2f;
 #pragma mark - JQAlertView
-
-static const CGFloat kRowHeight = 48.0f;
-static const CGFloat kRowLineHeight = 1.0f;
-static const CGFloat kSeparatorHeight = 6.0f;
-static const CGFloat kTitleFontSize = 15.0f;
-static const CGFloat kMsgFontSize = 13.0f;
-static const CGFloat kBtnTitleFontSize = 18.0f;
-static const NSTimeInterval kShowAnimateDuration = 0.4f;
-static const NSTimeInterval kDismissAnimateDuration = 0.2f;
-
-#define actionSheetViewWidth ([UIScreen mainScreen].bounds.size.width * 0.7)
-
 @interface JQAlertView()
 @property (nonatomic, assign) JQAlertViewStyle style;
 @property (nonatomic, strong) NSMutableArray <JQAlertAction *> *alertActions;
@@ -64,16 +80,15 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
 @implementation JQAlertView
 
+#define actionSheetViewWidth ([UIScreen mainScreen].bounds.size.width * 0.7)
 #define JQColor(r, g, b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1.0f]
 
+#pragma mark - lazy load
 - (NSMutableArray<JQAlertAction *> *)alertActions
 {
-    if (!_alertActions) {
-        _alertActions = [NSMutableArray array];
-    }
-
-    return _alertActions;
+    return _alertActions ?: (_alertActions = [NSMutableArray array]);
 }
+#pragma mark - getter
 - (JQAlertViewStyle)preferredStyle
 {
     return _style;
@@ -84,7 +99,20 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     return self.alertActions;
 }
 
-+ (instancetype)alertViewWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(JQAlertViewStyle)preferredStyle
+#pragma mark - super init methods
+- (instancetype)initWithFrame:(CGRect)frame
+{
+    return [self initWithTitle:nil message:nil preferredStyle:JQAlertViewStyleActionSheet];
+}
+- (instancetype)initWithCoder:(NSCoder *)aDecoder
+{
+    return [self initWithTitle:nil message:nil preferredStyle:JQAlertViewStyleActionSheet];
+}
+
+#pragma mark - public methods
++ (instancetype)alertViewWithTitle:(nullable NSString *)title
+                           message:(nullable NSString *)message
+                    preferredStyle:(JQAlertViewStyle)preferredStyle
 {
     return [[self alloc] initWithTitle:title message:message preferredStyle:preferredStyle];
 }
@@ -97,30 +125,32 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
                    cancelTitle:(nullable NSString *)cancelTitle
                        handler:(void (^ __nullable)(JQAlertView *alertView, NSInteger index))handler;
 {
-    JQAlertView *alertView = [[self alloc] initWithTitle:title message:message preferredStyle:preferredStyle];
+    JQAlertView *alertView = [self alertViewWithTitle:title message:message preferredStyle:preferredStyle];
 
-    for (NSString *otherTitle in titles) {
-        JQAlertAction *action = [JQAlertAction actionWithTitle:otherTitle style:JQAlertActionStyleDefault handler:nil];
-        [alertView.alertActions addObject:action];
-    }
+    for (NSString *otherTitle in titles)
+        [alertView.alertActions addObject:[JQAlertAction actionWithTitle:otherTitle
+                                                                   style:JQAlertActionStyleDefault
+                                                                 handler:nil]];
     
-    if (destructiveTitle && destructiveTitle.length) {
-        JQAlertAction *destr = [JQAlertAction actionWithTitle:destructiveTitle style:JQAlertActionStyleDestructive handler:nil];
-        [alertView.alertActions addObject:destr];
-    }
+    if (destructiveTitle && destructiveTitle.length)
+        [alertView.alertActions addObject:[JQAlertAction actionWithTitle:destructiveTitle
+                                                                   style:JQAlertActionStyleDestructive
+                                                                 handler:nil]];
     
-    
-    if (cancelTitle && cancelTitle.length) {
-        JQAlertAction *cancel = [JQAlertAction actionWithTitle:cancelTitle style:JQAlertActionStyleCancel handler:nil];
-        [alertView.alertActions addObject:cancel];
-    }
+    if (cancelTitle && cancelTitle.length)
+        [alertView.alertActions addObject:[JQAlertAction actionWithTitle:cancelTitle
+                                                                   style:JQAlertActionStyleCancel
+                                                                 handler:nil]];
     
     alertView.alertViewHandler = handler;
     
     [alertView show];
 }
 
-- (instancetype)initWithTitle:(nullable NSString *)title message:(nullable NSString *)message preferredStyle:(JQAlertViewStyle)preferredStyle
+#pragma mark - main method
+- (instancetype)initWithTitle:(nullable NSString *)title
+                      message:(nullable NSString *)message
+               preferredStyle:(JQAlertViewStyle)preferredStyle
 {
     self = [super initWithFrame:[UIScreen mainScreen].bounds];
     if (self)
@@ -151,7 +181,6 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
 - (void)addActions:(NSArray <JQAlertAction *>*)actions
 {
-    
     NSInteger count = 0;
     JQAlertAction *cancelAction = nil;
     for (JQAlertAction *action in actions)
@@ -172,146 +201,7 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 
 - (void)show
 {
-    
-    CGFloat actionSheetHeight = 0.0f;
-    
-    if (self.title && self.title.length)
-    {
-        actionSheetHeight += kRowLineHeight;
-        
-        CGFloat titleHeight = ceil([self.title boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
-                                                            options:NSStringDrawingUsesLineFragmentOrigin
-                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]}
-                                                            context:nil].size.height) + 10;
-        
-        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, actionSheetHeight, self.frame.size.width, titleHeight)];
-        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        titleLabel.text = self.title;
-        
-        titleLabel.backgroundColor = [UIColor whiteColor];
-        titleLabel.textColor = JQColor(100, 100, 100);
-        titleLabel.textAlignment = NSTextAlignmentCenter;
-        titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
-        titleLabel.numberOfLines = 0;
-        [_actionSheetView addSubview:titleLabel];
-        
-        actionSheetHeight += titleHeight;
-    }
-    
-    if (self.message && self.message.length)
-    {
-    
-        CGFloat msgHeight = ceil([self.message boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
-                                                            options:NSStringDrawingUsesLineFragmentOrigin
-                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kMsgFontSize]}
-                                                            context:nil].size.height) + 15;
-        
-        UILabel *msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, actionSheetHeight -= 5, self.frame.size.width, msgHeight)];
-        msgLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-        msgLabel.text = self.message;
-        msgLabel.backgroundColor = [UIColor whiteColor];
-        msgLabel.textColor = JQColor(150, 150, 150);
-        msgLabel.textAlignment = NSTextAlignmentCenter;
-        msgLabel.font = [UIFont systemFontOfSize:kMsgFontSize];
-        msgLabel.numberOfLines = 0;
-        [_actionSheetView addSubview:msgLabel];
-        
-        actionSheetHeight += msgHeight;
-    }
-    
-    UIImage *normalImg = [self imageWithColor:[UIColor whiteColor]];
-    UIImage *highlightedImg = [self imageWithColor:JQColor(242, 242, 242)];
-   
-    CGFloat btnWidth = actionSheetViewWidth * 0.5 - kRowLineHeight;
-   
-    // 记录当按钮为两个的时候 alert模式下 文字时候正常显示
-    BOOL isInOneLine = true;
-    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert)
-    {
-        for (JQAlertAction *action in self.alertActions)
-        {
-            CGFloat titleWidth = ceil([action.title boundingRectWithSize:CGSizeMake(MAXFLOAT, actionSheetHeight)
-                                                                 options:NSStringDrawingUsesLineFragmentOrigin
-                                                              attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:kBtnTitleFontSize]}
-                                                                 context:nil].size.width);
-            if (titleWidth > btnWidth)
-            {
-                
-                isInOneLine = false;
-                break;
-            }
-        }
-    }
-    
-
-    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert && isInOneLine)
-    {
-
-        actionSheetHeight += kRowLineHeight;
-        for (NSInteger i = 0; i < self.alertActions.count; i++)
-        {
-            JQAlertAction *action = self.alertActions[i];
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight);
-            button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
-            [button setTitle:action.title forState:UIControlStateNormal];
-            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
-            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
-            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
-            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-
-            if (action.style == JQAlertActionStyleDestructive)
-                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            
-            [_actionSheetView addSubview:button];
-        }
-        actionSheetHeight += kRowHeight;
-        
-    }else{
-       
-        for (NSInteger i = 0; i < self.alertActions.count; i++)
-        {
-            JQAlertAction *action = self.alertActions[i];
-            
-            actionSheetHeight += action.style == JQAlertActionStyleCancel ? kSeparatorHeight : kRowLineHeight;
-            
-            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
-            button.frame = CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight);
-            button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
-            button.tag = i;
-            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
-            [button setTitle:action.title forState:UIControlStateNormal];
-            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
-            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
-            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
-            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
-            
-            if (action.style == JQAlertActionStyleDestructive)
-                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
-            
-            [_actionSheetView addSubview:button];
-            actionSheetHeight += kRowHeight;
-            
-        }
-    }
-    
-   
-    // 设置frame
-    if (self.style == JQAlertViewStyleActionSheet)
-    {
-        _actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, actionSheetHeight);
-    
-    } else{
-
-        CGFloat x = ([UIScreen mainScreen].bounds.size.width - actionSheetViewWidth) * 0.5;
-        CGFloat y = ([UIScreen mainScreen].bounds.size.height - actionSheetHeight) * 0.5;
-        _actionSheetView.frame = CGRectMake(x, y, actionSheetViewWidth, actionSheetHeight);
-        _actionSheetView.alpha = 0.0f;
-    }
-    
-    // 弹出alertview
+    [self setupSubView];
     dispatch_async(dispatch_get_main_queue(), ^{
         NSEnumerator *frontToBackWindows = [UIApplication.sharedApplication.windows reverseObjectEnumerator];
         for (UIWindow *window in frontToBackWindows)
@@ -346,7 +236,150 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     
 }
 
+/** 初始化子控件 */
+- (void)setupSubView
+{
+    CGFloat actionSheetHeight = 0.0f;
+    
+    // title
+    if (self.title && self.title.length)
+    {
+        actionSheetHeight += kRowLineHeight;
+        
+        CGFloat titleHeight = ceil([self.title boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]}
+                                                            context:nil].size.height) + 10;
+        
+        UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, actionSheetHeight, self.frame.size.width, titleHeight)];
+        titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        titleLabel.text = self.title;
+        
+        titleLabel.backgroundColor = [UIColor whiteColor];
+        titleLabel.textColor = JQColor(100, 100, 100);
+        titleLabel.textAlignment = NSTextAlignmentCenter;
+        titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
+        titleLabel.numberOfLines = 0;
+        [_actionSheetView addSubview:titleLabel];
+        
+        actionSheetHeight += titleHeight;
+    }
+    
+    // message
+    if (self.message && self.message.length)
+    {
+        
+        CGFloat msgHeight = ceil([self.message boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
+                                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                                         attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kMsgFontSize]}
+                                                            context:nil].size.height) + 15;
+        
+        UILabel *msgLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, actionSheetHeight -= 5, self.frame.size.width, msgHeight)];
+        msgLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+        msgLabel.text = self.message;
+        msgLabel.backgroundColor = [UIColor whiteColor];
+        msgLabel.textColor = JQColor(150, 150, 150);
+        msgLabel.textAlignment = NSTextAlignmentCenter;
+        msgLabel.font = [UIFont systemFontOfSize:kMsgFontSize];
+        msgLabel.numberOfLines = 0;
+        [_actionSheetView addSubview:msgLabel];
+        
+        actionSheetHeight += msgHeight;
+    }
+    
+    // 记录当按钮为两个的时候 alert模式下 文字时候正常显示
+    CGFloat btnWidth = actionSheetViewWidth * 0.5 - kRowLineHeight;
+    BOOL isInOneLine = true;
+    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert)
+    {
+        for (JQAlertAction *action in self.alertActions)
+        {
+            CGFloat titleWidth = ceil([action.title boundingRectWithSize:CGSizeMake(MAXFLOAT, actionSheetHeight)
+                                                                 options:NSStringDrawingUsesLineFragmentOrigin
+                                                              attributes:@{NSFontAttributeName : [UIFont systemFontOfSize:kBtnTitleFontSize]}
+                                                                 context:nil].size.width);
+            if (titleWidth > btnWidth)
+            {
+                
+                isInOneLine = false;
+                break;
+            }
+        }
+    }
+    
+    
+    // button
+    UIImage *normalImg = [UIColor whiteColor].image;
+    UIImage *highlightedImg = JQColor(242, 242, 242).image;
+    if (self.alertActions.count == 2 && self.style == JQAlertViewStyleAlert && isInOneLine)
+    {
+        
+        actionSheetHeight += kRowLineHeight;
+        for (NSInteger i = 0; i < self.alertActions.count; i++)
+        {
+            JQAlertAction *action = self.alertActions[i];
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(i * (btnWidth + kRowLineHeight), actionSheetHeight, btnWidth, kRowHeight);
+            button.tag = i;
+            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
+            [button setTitle:action.title forState:UIControlStateNormal];
+            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
+            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
+            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
+            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            
+            if (action.style == JQAlertActionStyleDestructive)
+                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            
+            [_actionSheetView addSubview:button];
+        }
+        actionSheetHeight += kRowHeight;
+        
+    }else{
+        
+        for (NSInteger i = 0; i < self.alertActions.count; i++)
+        {
+            JQAlertAction *action = self.alertActions[i];
+            
+            actionSheetHeight += action.style == JQAlertActionStyleCancel ? kSeparatorHeight : kRowLineHeight;
+            
+            UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
+            button.frame = CGRectMake(0, actionSheetHeight, _actionSheetView.frame.size.width, kRowHeight);
+            button.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+            button.tag = i;
+            button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
+            [button setTitle:action.title forState:UIControlStateNormal];
+            [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
+            [button setBackgroundImage:normalImg forState:UIControlStateNormal];
+            [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
+            [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
+            
+            if (action.style == JQAlertActionStyleDestructive)
+                [button setTitleColor:[UIColor redColor] forState:UIControlStateNormal];
+            
+            [_actionSheetView addSubview:button];
+            actionSheetHeight += kRowHeight;
+        }
+    }
+    
+    
+    // 设置frame
+    if (self.style == JQAlertViewStyleActionSheet)
+    {
+        _actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, actionSheetHeight);
+        
+    } else{
+        
+        CGFloat x = ([UIScreen mainScreen].bounds.size.width - actionSheetViewWidth) * 0.5;
+        CGFloat y = ([UIScreen mainScreen].bounds.size.height - actionSheetHeight) * 0.5;
+        _actionSheetView.frame = CGRectMake(x, y, actionSheetViewWidth, actionSheetHeight);
+        _actionSheetView.alpha = 0.0f;
+    }
+}
 
+
+#pragma mark - 按钮点击
 - (void)buttonClicked:(UIButton *)button
 {
     [UIView animateWithDuration:kDismissAnimateDuration
@@ -384,21 +417,6 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
     [self buttonClicked:nil];
 }
 
-- (UIImage *)imageWithColor:(UIColor *)color
-{
-    CGRect rect = CGRectMake(0.0f, 0.0f, 1.0f, 1.0f);
-    UIGraphicsBeginImageContext(rect.size);
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    
-    CGContextSetFillColorWithColor(context, [color CGColor]);
-    CGContextFillRect(context, rect);
-    
-    UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
-    UIGraphicsEndImageContext();
-    
-    return image;
-}
-
 - (void)dealloc
 {
 #ifdef DEBUG
@@ -406,3 +424,4 @@ static const NSTimeInterval kDismissAnimateDuration = 0.2f;
 #endif
 }
 @end
+

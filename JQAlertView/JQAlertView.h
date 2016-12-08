@@ -21,7 +21,7 @@ typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
 
 @property (nullable, nonatomic, readonly) NSString *title;
 
-@property (nonatomic, readonly, assign) JQAlertActionStyle style;
+@property (nonatomic, assign, readonly) JQAlertActionStyle style;
 
 + (instancetype)actionWithTitle:(nullable NSString *)title style:(JQAlertActionStyle)style handler:(void (^ __nullable)(JQAlertAction *action))handler;
 @end
