@@ -81,7 +81,6 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 @implementation JQAlertView
 
 #define actionSheetViewWidth ([UIScreen mainScreen].bounds.size.width * 0.7)
-#define JQColor(r, g, b) [UIColor colorWithRed:(r)/255.0f green:(g)/255.0f blue:(b)/255.0f alpha:1.0f]
 
 #pragma mark - lazy load
 - (NSMutableArray<JQAlertAction *> *)alertActions
@@ -171,7 +170,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
         if (preferredStyle == JQAlertViewStyleActionSheet)
             actionSheetView.frame = CGRectMake(0, self.frame.size.height, self.frame.size.width, 0);
         actionSheetView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleWidth;
-        actionSheetView.backgroundColor = JQColor(238, 238, 238);
+        actionSheetView.backgroundColor = [UIColor colorWithWhite:0.933 alpha:1];
         [self addSubview:_actionSheetView = actionSheetView];
 
     }
@@ -257,7 +256,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
         titleLabel.text = self.title;
         
         titleLabel.backgroundColor = [UIColor whiteColor];
-        titleLabel.textColor = JQColor(100, 100, 100);
+        titleLabel.textColor = [UIColor colorWithWhite:0.392 alpha:1];
         titleLabel.textAlignment = NSTextAlignmentCenter;
         titleLabel.font = [UIFont systemFontOfSize:kTitleFontSize];
         titleLabel.numberOfLines = 0;
@@ -279,7 +278,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
         msgLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
         msgLabel.text = self.message;
         msgLabel.backgroundColor = [UIColor whiteColor];
-        msgLabel.textColor = JQColor(150, 150, 150);
+        msgLabel.textColor = [UIColor colorWithWhite:0.588 alpha:1];
         msgLabel.textAlignment = NSTextAlignmentCenter;
         msgLabel.font = [UIFont systemFontOfSize:kMsgFontSize];
         msgLabel.numberOfLines = 0;
@@ -372,17 +371,15 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 - (void)setupBtnWithAction:(JQAlertAction *)action frame:(CGRect)frame resizingMask:(UIViewAutoresizing)resizingMask
 {
     
-    UIImage *normalImg = [UIColor whiteColor].image;
-    UIImage *highlightedImg = JQColor(242, 242, 242).image;
     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
     button.frame = frame;
     button.autoresizingMask = resizingMask;
     button.tag = [self.alertActions indexOfObject:action];
     button.titleLabel.font = [UIFont systemFontOfSize:kBtnTitleFontSize];
     [button setTitle:action.title forState:UIControlStateNormal];
-    [button setTitleColor:JQColor(64, 64, 64) forState:UIControlStateNormal];
-    [button setBackgroundImage:normalImg forState:UIControlStateNormal];
-    [button setBackgroundImage:highlightedImg forState:UIControlStateHighlighted];
+    [button setTitleColor:[UIColor colorWithWhite:0.251 alpha:1] forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIColor whiteColor].image forState:UIControlStateNormal];
+    [button setBackgroundImage:[UIColor colorWithWhite:0.949 alpha:1].image forState:UIControlStateHighlighted];
     [button addTarget:self action:@selector(buttonClicked:) forControlEvents:UIControlEventTouchUpInside];
 
     if (action.style == JQAlertActionStyleDestructive)
