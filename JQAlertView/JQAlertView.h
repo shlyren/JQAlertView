@@ -1,6 +1,6 @@
 //
 //  JQAlertView.h
-//  JQAlertControllerDemo
+//  https://github.com/shlyren/JQAlertView
 //
 //  Created by JiaQi on 2016/11/14.
 //  Copyright © 2016年 任玉祥. All rights reserved.
@@ -60,7 +60,7 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
 @property (nonatomic, readonly, strong) NSArray<JQAlertAction *> *actions;
 
 /**
- 快速显示alertView
+ 显示alertView
 
  @param title title
  @param message subTitle
@@ -77,7 +77,13 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
               destructiveTitle:(nullable NSString *)destructiveTitle // index == titles.count
                    cancelTitle:(nullable NSString *)cancelTitle // if destructiveTitle != nil or @"" index is `titles.count+1`, else index is `titles.count`
                        handler:(void (^ __nullable)(JQAlertView *alertView, NSInteger index))handler;
-
+/** 从底部弹出 */
++ (void)showActionSheetWithTitle:(nullable NSString *)title
+                         message:(nullable NSString *)message
+                          titles:(nullable NSArray <NSString *>*)titles
+                destructiveTitle:(nullable NSString *)destructiveTitle
+                     cancelTitle:(nullable NSString *)cancelTitle
+                         handler:(void (^ __nullable)(JQAlertView *alertView, NSInteger index))handler;
 
 /**
  创建一个弹框

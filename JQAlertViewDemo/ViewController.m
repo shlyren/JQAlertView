@@ -31,16 +31,14 @@
 - (IBAction)onelint
 {
     
-    [JQAlertView showAlertViewWithTitle:@"showAlert"
-                                message:@"alertView style"
-                         preferredStyle:JQAlertViewStyleActionSheet
-                                 titles:@[@"JQAlertViewStyleActionSheet", @"JQAlertViewStyleAlert"]
-                       destructiveTitle:nil
-                            cancelTitle:@"cancel"
-                                handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
-       
+    [JQAlertView showActionSheetWithTitle:@"showAlert"
+                                  message:@"alertView style"
+                                   titles:@[@"JQAlertViewStyleActionSheet", @"JQAlertViewStyleAlert"]
+                         destructiveTitle:nil
+                              cancelTitle:@"cancel"
+                                  handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
         if (index > 1) return;
-
+        
         [JQAlertView showAlertViewWithTitle:alertView.message
                                     message:[NSString stringWithFormat:@"%zd",index]
                              preferredStyle:index
@@ -49,10 +47,10 @@
                                 cancelTitle:@"cancel"
                                     handler:^(JQAlertView * _Nonnull alertView, NSInteger index) {
                                         
-              NSLog(@"index == %zd, title: %@", index, alertView.title);
-         }];
-
-    }];
+                                        NSLog(@"index == %zd, title: %@", index, alertView.title);
+        }];
+   }];
+   
     
 }
 
