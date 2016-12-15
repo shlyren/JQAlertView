@@ -12,9 +12,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - JQAlertAction
 typedef NS_ENUM(NSInteger, JQAlertActionStyle) {
-    JQAlertActionStyleDefault = 0, // 默认
-    JQAlertActionStyleCancel,   // 取消
-    JQAlertActionStyleDestructive // 毁灭性
+    JQAlertActionStyleDefault = 0, // normal
+    JQAlertActionStyleCancel,   // can only have one
+    JQAlertActionStyleDestructive // textColor is red
 };
 
 @interface JQAlertAction : NSObject
