@@ -101,5 +101,23 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
 
 - (void)show;
 
-NS_ASSUME_NONNULL_END
+
+/**
+ 显示系统的alertController
+
+ @param title 标题
+ @param message 信息
+ @param cancelTitle 取消按钮
+ @param destructiveTitle 危险操作
+ @param titles 其他按钮
+ @param handler 回调 index说明: 取消:-1  危险做操:0  其他按钮: 1....titles.cout  [titles的index + 1]
+ */
++ (void)showSystemAlertWithTitle:(nullable NSString *)title
+                         message:(nullable NSString *)message
+                     cancelTitle:(nullable NSString *)cancelTitle // index == -1
+                destructiveTitle:(nullable NSString *)destructiveTitle // index == 0
+                     otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+                         handler:(void (^__nullable)(NSInteger index))handler;
+
 @end
+NS_ASSUME_NONNULL_END

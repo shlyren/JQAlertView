@@ -54,6 +54,18 @@
     
 }
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
+{
+    [JQAlertView showSystemAlertWithTitle:@"系统样式"
+                                  message:@"显示系统样式的alert"
+                              cancelTitle:@"取消"
+                         destructiveTitle:@"删除"
+                              otherTitles:@[@"按钮1", @"按钮2"]
+                                  handler:^(NSInteger index) {
+        NSLog(@"系统样式 ==  %zd", index);
+    }];
+}
+
 - (IBAction)showAlert
 {
     [self showWithStyle:JQAlertViewStyleAlert twoAction:self.isTwo.isOn];

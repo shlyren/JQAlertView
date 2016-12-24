@@ -446,5 +446,41 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     NSLog(@"JQAlertView dealloc");
 #endif
 }
+
++ (void)showSystemAlertWithTitle:(nullable NSString *)title
+                         message:(nullable NSString *)message
+                     cancelTitle:(nullable NSString *)cancelTitle // index == -1
+                destructiveTitle:(nullable NSString *)destructiveTitle // index == 0
+                     otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+                         handler:(void (^__nullable)(NSInteger index))handler;
+{
+    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    
+    if (cancelTitle && cancelTitle.length) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+            handler(-1);
+        }];
+        [alertC addAction:cancel];
+    }
+    
+    if (destructiveTitle && destructiveTitle.length) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:destructiveTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+            handler(0);
+        }];
+        [alertC addAction:cancel];
+    }
+    
+    
+    for (NSInteger i = 0; i < titles.count; i++) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:titles[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            handler(i+1);
+        }];
+        [alertC addAction:action];
+    }
+    
+    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertC animated:true completion:nil];
+    
+    
+}
 @end
 
