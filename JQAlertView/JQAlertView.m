@@ -458,14 +458,15 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     
     if (cancelTitle && cancelTitle.length) {
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            handler(-1);
+            if (handler) handler(-1);
         }];
         [alertC addAction:cancel];
     }
     
     if (destructiveTitle && destructiveTitle.length) {
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:destructiveTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            handler(0);
+
+            if (handler) handler(0);
         }];
         [alertC addAction:cancel];
     }
@@ -473,7 +474,8 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     
     for (NSInteger i = 0; i < titles.count; i++) {
         UIAlertAction *action = [UIAlertAction actionWithTitle:titles[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            handler(i+1);
+            
+            if (handler) handler(i+1);
         }];
         [alertC addAction:action];
     }
