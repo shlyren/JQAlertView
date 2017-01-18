@@ -482,7 +482,15 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertC animated:true completion:nil];
     
-    
+}
+
++ (void)showSystemAlertWithTitle:(NSString *)title
+                         message:(NSString *)message
+                     cancelTitle:(NSString *)cancelTitle// index == -1
+                      otherTitle:(NSString *)otherTitle // index == 1
+                         handler:(void (^)(NSInteger index))handler
+{
+    [self showSystemAlertWithTitle:title message:message cancelTitle:cancelTitle destructiveTitle:nil otherTitles:@[otherTitle] handler:handler];
 }
 @end
 

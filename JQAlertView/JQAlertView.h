@@ -119,5 +119,12 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
                      otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
                          handler:(void (^__nullable)(NSInteger index))handler;
 
+
++ (void)showSystemAlertWithTitle:(NSString *)title
+                         message:(NSString *)message
+                     cancelTitle:(NSString *)cancelTitle// index == -1
+                      otherTitle:(NSString *)otherTitle // index == 1
+                         handler:(void (^__nullable)(NSInteger titles))handler;
+
 @end
 NS_ASSUME_NONNULL_END

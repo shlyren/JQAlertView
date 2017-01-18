@@ -56,12 +56,16 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-    [JQAlertView showSystemAlertWithTitle:@"系统样式"
-                                  message:@"显示系统样式的alert"
-                              cancelTitle:@"取消"
-                         destructiveTitle:@"删除"
-                              otherTitles:@[@"按钮1", @"按钮2"]
-                                  handler:^(NSInteger index) {
+//    [JQAlertView showSystemAlertWithTitle:@"系统样式"
+//                                  message:@"显示系统样式的alert"
+//                              cancelTitle:@"取消"
+//                         destructiveTitle:@"删除"
+//                              otherTitles:@[@"按钮1", @"按钮2"]
+//                                  handler:^(NSInteger index) {
+//        NSLog(@"系统样式 ==  %zd", index);
+//    }];
+    
+    [JQAlertView showSystemAlertWithTitle:@"title" message:@"message" cancelTitle:@"取消" otherTitle:@"确定" handler:^(NSInteger index) {
         NSLog(@"系统样式 ==  %zd", index);
     }];
 }
