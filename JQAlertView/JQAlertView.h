@@ -102,29 +102,44 @@ typedef NS_ENUM(NSInteger, JQAlertViewStyle) {
 - (void)show;
 
 
+
+@end
+NS_ASSUME_NONNULL_END
+
+@interface UIAlertController (JQAlert)
+
 /**
  显示系统的alertController
-
+ 
  @param title 标题
  @param message 信息
  @param cancelTitle 取消按钮
  @param destructiveTitle 危险操作
  @param titles 其他按钮
- @param handler 回调 index说明: 取消:-1  危险做操:0  其他按钮: 1....titles.cout  [titles的index + 1]
+ @param handler 回调 index说明: 取消:0  危险操作:-1  其他按钮: 1....titles.cout  [titles的index + 1]
  */
-+ (void)showSystemAlertWithTitle:(nullable NSString *)title
-                         message:(nullable NSString *)message
-                     cancelTitle:(nullable NSString *)cancelTitle // index == -1
-                destructiveTitle:(nullable NSString *)destructiveTitle // index == 0
-                     otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
-                         handler:(void (^__nullable)(NSInteger index))handler;
++ (void)showAlertWithTitle:(nullable NSString *)title
+                   message:(nullable NSString *)message
+               cancelTitle:(nullable NSString *)cancelTitle // index == 0
+          destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
+               otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+                   handler:(void (^__nullable)(NSInteger index))handler;
 
 
-+ (void)showSystemAlertWithTitle:(NSString *)title
-                         message:(NSString *)message
-                     cancelTitle:(NSString *)cancelTitle// index == -1
-                      otherTitle:(NSString *)otherTitle // index == 1
-                         handler:(void (^__nullable)(NSInteger titles))handler;
++ (void)showDefaultAlertWithTitle:(nullable NSString *)title
+                          message:(nullable NSString *)message
+                      cancelTitle:(nullable NSString *)cancelTitle// index == 0
+                     defaultTitle:(nullable NSString *)defaultTitle // index == 1
+                          handler:(void (^__nullable)(NSInteger index))handler;
 
++ (void)showDestructiveAlertWithTitle:(nullable NSString *)title
+                              message:(nullable NSString *)message
+                          cancelTitle:(nullable NSString *)cancelTitle// index == 0
+                     destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
+                              handler:(void (^__nullable)(NSInteger index))handler;
+
++ (void)showAlertWithTitle:(nullable NSString *)title
+                   message:(nullable NSString *)message
+               cancelTitle:(nullable NSString *)cancelTitle // index == 0
+                   handler:(void (^__nullable)(NSInteger index))handler;;
 @end
-NS_ASSUME_NONNULL_END

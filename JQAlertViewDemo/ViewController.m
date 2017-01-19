@@ -56,7 +56,7 @@
 
 - (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event
 {
-//    [JQAlertView showSystemAlertWithTitle:@"系统样式"
+//    [UIAlertController showAlertWithTitle:@"系统样式"
 //                                  message:@"显示系统样式的alert"
 //                              cancelTitle:@"取消"
 //                         destructiveTitle:@"删除"
@@ -65,11 +65,21 @@
 //        NSLog(@"系统样式 ==  %zd", index);
 //    }];
     
-    [JQAlertView showSystemAlertWithTitle:@"title" message:@"message" cancelTitle:@"取消" otherTitle:@"确定" handler:^(NSInteger index) {
+    
+//    [UIAlertController showAlertWithTitle:@"title" message:@"message" cancelTitle:@"取消" destructiveTitle:@"11" otherTitles:@[@"33"] handler:^(NSInteger index) {
+//                NSLog(@"系统样式 ==  %zd", index);
+//            }];
+    
+    [UIAlertController showAlertWithTitle:@"title" message:@"message" cancelTitle:@"cancel" handler:^(NSInteger index) {
         NSLog(@"系统样式 ==  %zd", index);
-    }];
+    }];;
+//    [UIAlertController showDefaultAlertWithTitle:@"title" message:nil cancelTitle:@"cancel" defaultTitle:@"actionb" handler:^(NSInteger index) {
+//         NSLog(@"系统样式 ==  %zd", index);
+//    }];
+//    [UIAlertController showDestructiveAlertWithTitle:@"" message:@"message" cancelTitle:@"cancel" destructiveTitle:@"deletes" handler:^(NSInteger index) {
+//        NSLog(@"系统样式 ==  %zd", index);
+//    }];
 }
-
 - (IBAction)showAlert
 {
     [self showWithStyle:JQAlertViewStyleAlert twoAction:self.isTwo.isOn];
