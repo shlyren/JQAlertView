@@ -141,5 +141,16 @@ NS_ASSUME_NONNULL_END
 + (void)showAlertWithTitle:(nullable NSString *)title
                    message:(nullable NSString *)message
                cancelTitle:(nullable NSString *)cancelTitle // index == 0
-                   handler:(void (^__nullable)(NSInteger index))handler;;
+                   handler:(void (^__nullable)(NSInteger index))handler;
+
+
+/**
+ 显示弹出视图
+ */
++ (void)showSheetWithTitle:(nullable NSString *)title
+                   message:(nullable NSString *)message
+               cancelTitle:(nullable NSString *)cancelTitle // index == 0
+          destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
+               otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+                   handler:(void (^__nullable)(NSInteger index))handler;
 @end

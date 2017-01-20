@@ -76,6 +76,8 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 /** 回调 */
 @property (nonatomic, copy) void (^alertViewHandler)(JQAlertView *alertView, NSInteger index);
 
+@property (nonatomic, assign) NSInteger count;
+
 @end
 
 @implementation JQAlertView
@@ -196,18 +198,17 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 
 - (void)addActions:(NSArray <JQAlertAction *>*)actions
 {
-    NSInteger count = 0;
     JQAlertAction *cancelAction = nil;
     for (JQAlertAction *action in actions)
     {
         if (action.style == JQAlertActionStyleCancel)
         {
             cancelAction = action;
-            count++;
+            self.count++;
         }else {
             [self.alertActions addObject:action];
         }
-        NSAssert(count < 2, @"JQAlertView can only have one action with a style of JQAlertActionStyleCancel");
+        NSAssert(self.count < 2, @"JQAlertView can only have one action with a style of JQAlertActionStyleCancel");
     }
     
     if (cancelAction) [self.alertActions addObject:cancelAction];
@@ -448,7 +449,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
 }
 @end
 
-
+#pragma mark - UIAlertController扩展
 @implementation UIAlertController (JQAlert)
 
 + (void)showAlertWithTitle:(nullable NSString *)title
@@ -458,41 +459,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
                otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
                    handler:(void (^__nullable)(NSInteger index))handler;
 {
-    
-    UIAlertController *alertC = [self alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
-    
-    if (cancelTitle && cancelTitle.length) {
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
-            if (handler) {
-                handler(0);
-            }
-        }];
-        [alertC addAction:cancel];
-    }
-    
-    if (destructiveTitle && destructiveTitle.length) {
-        UIAlertAction *cancel = [UIAlertAction actionWithTitle:destructiveTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
-            
-            if (handler) {
-                handler(-1);
-            }
-        }];
-        [alertC addAction:cancel];
-    }
-    
-    
-    for (NSInteger i = 0; i < titles.count; i++) {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:titles[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
-            
-            if (handler) {
-                handler(i+1);
-            }
-        }];
-        [alertC addAction:action];
-    }
-    
-    [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertC animated:true completion:nil];
-    
+    [self showWithTitle:title message:message style:UIAlertControllerStyleAlert cancelTitle:cancelTitle destructiveTitle:destructiveTitle otherTitles:titles handler:handler];
 }
 
 
@@ -513,9 +480,40 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
                      destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
                               handler:(void (^__nullable)(NSInteger index))handler
 {
+    [self showAlertWithTitle:title message:message cancelTitle:cancelTitle destructiveTitle:destructiveTitle otherTitles:nil handler:handler];
+}
+
+
++ (void)showAlertWithTitle:(nullable NSString *)title message:(nullable NSString *)message cancelTitle:(nullable NSString *)cancelTitle handler:(void (^__nullable)(NSInteger index))handler;
+{
+    [self showAlertWithTitle:title message:message cancelTitle:cancelTitle destructiveTitle:nil otherTitles:nil handler:handler];
+}
+
++ (void)showSheetWithTitle:(nullable NSString *)title
+                   message:(nullable NSString *)message
+               cancelTitle:(nullable NSString *)cancelTitle // index == 0
+          destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
+               otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+                   handler:(void (^__nullable)(NSInteger index))handler
+{
+    [self showWithTitle:title message:message style:UIAlertControllerStyleActionSheet cancelTitle:cancelTitle destructiveTitle:destructiveTitle otherTitles:titles handler:handler];
+}
+
+
+
+/**
+ 主要方法
+ */
++ (void)showWithTitle:(nullable NSString *)title
+              message:(nullable NSString *)message
+                style:(UIAlertControllerStyle)style
+          cancelTitle:(nullable NSString *)cancelTitle // index == 0
+     destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
+          otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
+              handler:(void (^__nullable)(NSInteger index))handler;
+{
     
-    
-    UIAlertController *alertC = [UIAlertController alertControllerWithTitle:title message:message preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alertC = [self alertControllerWithTitle:title message:message preferredStyle:style];
     
     if (cancelTitle && cancelTitle.length) {
         UIAlertAction *cancel = [UIAlertAction actionWithTitle:cancelTitle style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
@@ -525,21 +523,24 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
     }
     
     if (destructiveTitle && destructiveTitle.length) {
-        UIAlertAction *action = [UIAlertAction actionWithTitle:destructiveTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
+        UIAlertAction *cancel = [UIAlertAction actionWithTitle:destructiveTitle style:UIAlertActionStyleDestructive handler:^(UIAlertAction * _Nonnull action) {
             
             if (handler) handler(-1);
+        }];
+        [alertC addAction:cancel];
+    }
+    
+    
+    for (NSInteger i = 0; i < titles.count; i++) {
+        UIAlertAction *action = [UIAlertAction actionWithTitle:titles[i] style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            
+            if (handler) handler(i+1);
         }];
         [alertC addAction:action];
     }
     
-    
     [[UIApplication sharedApplication].keyWindow.rootViewController presentViewController:alertC animated:true completion:nil];
-}
-
-
-+ (void)showAlertWithTitle:(nullable NSString *)title message:(nullable NSString *)message cancelTitle:(nullable NSString *)cancelTitle handler:(void (^__nullable)(NSInteger index))handler;
-{
-    [self showAlertWithTitle:title message:message cancelTitle:cancelTitle destructiveTitle:nil otherTitles:nil handler:handler];
+    
 }
 
 @end
