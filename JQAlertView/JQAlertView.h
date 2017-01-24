@@ -125,19 +125,44 @@ NS_ASSUME_NONNULL_END
                otherTitles:(nullable NSArray <NSString *>*)titles // index == 1...titles.cout
                    handler:(void (^__nullable)(NSInteger index))handler;
 
+/**
+ 显示系统默认alert 两个按钮
 
+ @param title 标题
+ @param message 子标题
+ @param cancelTitle 取消按钮
+ @param defaultTitle 默认按钮
+ @param handler 回调
+ */
 + (void)showDefaultAlertWithTitle:(nullable NSString *)title
                           message:(nullable NSString *)message
                       cancelTitle:(nullable NSString *)cancelTitle// index == 0
                      defaultTitle:(nullable NSString *)defaultTitle // index == 1
                           handler:(void (^__nullable)(NSInteger index))handler;
 
+/**
+ 显示系统alert 两个按钮
+
+ @param title 标题
+ @param message 子标题
+ @param cancelTitle 取消
+ @param destructiveTitle 删除
+ @param handler 回调
+ */
 + (void)showDestructiveAlertWithTitle:(nullable NSString *)title
                               message:(nullable NSString *)message
                           cancelTitle:(nullable NSString *)cancelTitle// index == 0
                      destructiveTitle:(nullable NSString *)destructiveTitle // index == -1
                               handler:(void (^__nullable)(NSInteger index))handler;
 
+/**
+ 显示系统alert 一个按钮
+
+ @param title 标题
+ @param message 子标题
+ @param cancelTitle 取消
+ @param handler 回调
+ */
 + (void)showAlertWithTitle:(nullable NSString *)title
                    message:(nullable NSString *)message
                cancelTitle:(nullable NSString *)cancelTitle // index == 0
