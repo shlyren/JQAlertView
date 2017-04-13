@@ -59,7 +59,7 @@
 CGFloat const kRowHeight = 48.0f;
 CGFloat const kRowLineHeight = 1.0f;
 CGFloat const kSeparatorHeight = 6.0f;
-CGFloat const kTitleFontSize = 15.0f;
+CGFloat const kTitleFontSize = 16.0f;
 CGFloat const kMsgFontSize = 13.0f;
 CGFloat const kBtnTitleFontSize = 18.0f;
 NSTimeInterval const kShowAnimateDuration = 0.4f;
@@ -266,7 +266,7 @@ NSTimeInterval const kDismissAnimateDuration = 0.2f;
         CGFloat titleHeight = ceil([self.title boundingRectWithSize:CGSizeMake(actionSheetViewWidth, MAXFLOAT)
                                                             options:NSStringDrawingUsesLineFragmentOrigin
                                                          attributes:@{NSFontAttributeName:[UIFont systemFontOfSize:kTitleFontSize]}
-                                                            context:nil].size.height) + 10.0f;
+                                                            context:nil].size.height) + 20.0f;
         
         UILabel *titleLabel = [[UILabel alloc] initWithFrame:CGRectMake(0.0f, actionSheetHeight, self.frame.size.width, titleHeight)];
         titleLabel.autoresizingMask = UIViewAutoresizingFlexibleWidth;
